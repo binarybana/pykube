@@ -14,7 +14,7 @@ now = object()
 
 class BaseQuery(object):
 
-    def __init__(self, api, api_obj_class, namespace=None):
+    def __init__(self, api, api_obj_class, namespace=all_):
         self.api = api
         self.api_obj_class = api_obj_class
         self.namespace = namespace
@@ -47,9 +47,10 @@ class Query(BaseQuery):
 
     def get_by_name(self, name):
         kwargs = {
-            "url": "{}/{}".format(self.api_obj_class.endpoint, name),
-            "namespace": self.namespace,
+            "url": "{}/{}".format(self.api_obj_class.endpoint, name)
         }
+        if self.namespace is not None and self.namespace is not all_:
+            kwargs['namespace'] = self.namespace
         if self.api_obj_class.base:
             kwargs["base"] = self.api_obj_class.base
         if self.api_obj_class.version:
